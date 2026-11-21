@@ -45,6 +45,9 @@ export function DecisionPanel({ result, start, end, roomName }: DecisionPanelPro
           >
             {available ? "Available" : "Unavailable"}
           </p>
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+            Confirmed by booking rules
+          </p>
           <p className="text-xs text-slate-600">
             {roomName ?? "No room selected"} · {minutesToLabel(start)}–{minutesToLabel(end)}
           </p>

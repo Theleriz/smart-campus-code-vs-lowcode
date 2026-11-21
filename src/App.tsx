@@ -4,7 +4,7 @@ import { ROOMS, INITIAL_BOOKINGS } from "./data";
 import type { Booking, Room } from "./types";
 import {
   MINUTES_PER_DAY,
-  checkAvailability,
+  evaluateAvailability,
   labelToMinutes,
   minutesToLabel,
 } from "./utils";
@@ -12,6 +12,11 @@ import { RoomCard } from "./components/RoomCard";
 import { TimeSlider } from "./components/TimeSlider";
 import { DecisionPanel } from "./components/DecisionPanel";
 import { Timeline } from "./components/Timeline";
+import { ExplanationPanel } from "./components/ExplanationPanel";
+import { buildExplainRequest } from "./explain/contract";
+import { createHttpAdapter, createMockAdapter, type SimulatedFailure } from "./explain/adapters";
+
+type Engine = "mock" | "llm";
 
 function App() {
   const [bookings] = useState<Booking[]>(INITIAL_BOOKINGS);
@@ -20,16 +25,26 @@ function App() {
   const [start, setStart] = useState(600); // 10:00
   const [end, setEnd] = useState(660);     // 11:00
   const [hasChecked, setHasChecked] = useState(false);
+  const [engine, setEngine] = useState<Engine>("mock");
+  const [simulate, setSimulate] = useState<SimulatedFailure>("none");
 
   const selectedRoom: Room | null = useMemo(
     () => ROOMS.find((r) => r.id === selectedRoomId) ?? null,
     [selectedRoomId],
   );
 
+  // The deterministic rule engine is the only source of the decision.
   const result = useMemo(
-    () => checkAvailability(selectedRoom, start, end, currentTime, bookings),
+    () => evaluateAvailability(selectedRoom, start, end, currentTime, bookings),
     [selectedRoom, start, end, currentTime, bookings],
   );
+
+  // Practice #11: optional explanation of that decision (mock by default, live model via the server).
+  const adapter = useMemo(
+    () => (engine === "llm" ? createHttpAdapter() : createMockAdapter({ simulate })),
+    [engine, simulate],
+  );
+  const explainRequest = selectedRoom ? buildExplainRequest(selectedRoom.name, start, end, result) : null;
 
   const duration = end - start;
   const canCheck = selectedRoom !== null;
@@ -210,6 +225,48 @@ function App() {
                   </div>
                 )}
               </div>
+
+              {hasChecked && explainRequest && (
+                <div className="mt-4 border-t border-slate-100 pt-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label htmlFor="engine" className="text-xs font-medium text-slate-600">
+                      Explanation engine
+                    </label>
+                    <select
+                      id="engine"
+                      value={engine}
+                      onChange={(e) => setEngine(e.target.value as Engine)}
+                      className="text-xs border border-slate-200 rounded-md px-2 py-1 text-slate-700 bg-white"
+                    >
+                      <option value="mock">Mock AI (offline, free)</option>
+                      <option value="llm">Live LLM (server)</option>
+                    </select>
+                  </div>
+                  {engine === "mock" && (
+                    <details className="mt-2 text-xs text-slate-500">
+                      <summary className="cursor-pointer select-none">Test controls (simulate failures)</summary>
+                      <label htmlFor="simulate" className="sr-only">Simulated failure</label>
+                      <select
+                        id="simulate"
+                        value={simulate}
+                        onChange={(e) => setSimulate(e.target.value as SimulatedFailure)}
+                        className="mt-1.5 w-full border border-slate-200 rounded-md px-2 py-1 text-slate-700 bg-white"
+                      >
+                        <option value="none">No failure</option>
+                        <option value="timeout">Timeout (no answer)</option>
+                        <option value="error">API error (HTTP 500)</option>
+                        <option value="unavailable">Missing API key</option>
+                        <option value="invalid-output">Hallucinated answer</option>
+                      </select>
+                    </details>
+                  )}
+                  <ExplanationPanel
+                    key={`${JSON.stringify(explainRequest)}|${engine}|${simulate}`}
+                    request={explainRequest}
+                    adapter={adapter}
+                  />
+                </div>
+              )}
             </section>
 
             {/* Rules summary */}

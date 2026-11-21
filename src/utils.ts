@@ -1,4 +1,4 @@
-import type { Booking, Room, CheckResult, ValidationResult } from "./types";
+import type { Booking, Room, CheckResult, DetailedCheckResult, ReasonCode, ValidationResult } from "./types";
 
 export const MINUTES_PER_DAY = 1440;
 export const MAX_DURATION = 120;
@@ -17,19 +17,23 @@ export function labelToMinutes(label: string): number {
 
 export function validateInterval(start: number, end: number, currentTime: number): ValidationResult {
   if (![start, end, currentTime].every(Number.isInteger)) {
-    return { ok: false, reason: "Please enter valid times." };
+    return { ok: false, reason: "Please enter valid times.", code: "INVALID_TIME" };
   }
   if (start < 0 || end > MINUTES_PER_DAY) {
-    return { ok: false, reason: "Times must be within 00:00–24:00." };
+    return { ok: false, reason: "Times must be within 00:00–24:00.", code: "OUT_OF_RANGE" };
   }
   if (start >= end) {
-    return { ok: false, reason: "Start time must be before end time." };
+    return { ok: false, reason: "Start time must be before end time.", code: "START_NOT_BEFORE_END" };
   }
   if (start <= currentTime) {
-    return { ok: false, reason: `Start time must be after current time (${minutesToLabel(currentTime)}).` };
+    return {
+      ok: false,
+      reason: `Start time must be after current time (${minutesToLabel(currentTime)}).`,
+      code: "START_NOT_AFTER_NOW",
+    };
   }
   if (end - start > MAX_DURATION) {
-    return { ok: false, reason: `Booking cannot exceed ${MAX_DURATION} minutes (2 hours).` };
+    return { ok: false, reason: `Booking cannot exceed ${MAX_DURATION} minutes (2 hours).`, code: "TOO_LONG" };
   }
   return { ok: true, reason: "" };
 }
@@ -39,6 +43,53 @@ export function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: num
   return aStart < bEnd && bStart < aEnd;
 }
 
+/**
+ * The deterministic rule engine (single source of truth for availability).
+ * Returns the decision, the human-readable reasons and one ReasonCode per reason.
+ * Practice #11 only added the `codes` output; the rules and their order are unchanged.
+ */
+export function evaluateAvailability(
+  room: Room | null,
+  start: number,
+  end: number,
+  currentTime: number,
+  bookings: Booking[],
+): DetailedCheckResult {
+  if (!room) {
+    return { decision: "unavailable", reasons: ["Select a room to check."], codes: ["NO_ROOM"] };
+  }
+
+  const reasons: string[] = [];
+  const codes: ReasonCode[] = [];
+  const fail = (code: ReasonCode, reason: string) => {
+    codes.push(code);
+    reasons.push(reason);
+  };
+
+  const validation = validateInterval(start, end, currentTime);
+  if (!validation.ok) {
+    fail(validation.code ?? "INVALID_TIME", validation.reason);
+  }
+
+  if (room.blocked) {
+    fail("ROOM_BLOCKED", `Room "${room.name}" is currently blocked and cannot be booked.`);
+  }
+
+  const roomBookings = bookings.filter((b) => b.roomId === room.id);
+  if (roomBookings.some((b) => !Number.isInteger(b.start) || !Number.isInteger(b.end) || b.start >= b.end)) {
+    fail("INVALID_BOOKING_DATA", "This room has invalid booking data, so availability cannot be confirmed.");
+  }
+
+  const conflicts = roomBookings.filter((b) => overlaps(start, end, b.start, b.end));
+  if (conflicts.length > 0) {
+    const first = conflicts[0];
+    fail("OVERLAP", `Overlaps with "${first.title}" (${minutesToLabel(first.start)}–${minutesToLabel(first.end)}).`);
+  }
+
+  const decision = reasons.length === 0 ? "available" : "unavailable";
+  return { decision, reasons, codes };
+}
+
 export function checkAvailability(
   room: Room | null,
   start: number,
@@ -46,34 +97,11 @@ export function checkAvailability(
   currentTime: number,
   bookings: Booking[],
 ): CheckResult {
-  if (!room) {
-    return { decision: "unavailable", reasons: ["Select a room to check."] };
-  }
-
-  const reasons: string[] = [];
-
-  const validation = validateInterval(start, end, currentTime);
-  if (!validation.ok) {
-    reasons.push(validation.reason);
-  }
-
-  if (room.blocked) {
-    reasons.push(`Room "${room.name}" is currently blocked and cannot be booked.`);
-  }
-
-  const roomBookings = bookings.filter((b) => b.roomId === room.id);
-  if (roomBookings.some((b) => !Number.isInteger(b.start) || !Number.isInteger(b.end) || b.start >= b.end)) {
-    reasons.push("This room has invalid booking data, so availability cannot be confirmed.");
-  }
-
-  const conflicts = roomBookings.filter((b) => overlaps(start, end, b.start, b.end));
-  if (conflicts.length > 0) {
-    const first = conflicts[0];
-    reasons.push(
-      `Overlaps with "${first.title}" (${minutesToLabel(first.start)}–${minutesToLabel(first.end)}).`,
-    );
-  }
-
-  const decision = reasons.length === 0 ? "available" : "unavailable";
+  const { decision, reasons } = evaluateAvailability(room, start, end, currentTime, bookings);
   return { decision, reasons };
+}
+
+/** The first failed rule, or "AVAILABLE". This is the `reasonCode` sent to the explainer. */
+export function primaryReasonCode(result: DetailedCheckResult): ReasonCode {
+  return result.codes[0] ?? "AVAILABLE";
 }
