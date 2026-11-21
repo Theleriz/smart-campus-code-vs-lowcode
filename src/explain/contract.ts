@@ -136,7 +136,34 @@ export function validateExplainRequest(
 const FORBIDDEN_MARKUP_RE = /[<>`{}*#[\]|\\]|https?:|www\./i;
 const NEGATIVE_RE =
   /\b(unavailable|not available|isn't available|not free|cannot be booked|can't be booked|blocked|overlap\w*|conflict\w*|occupied|already booked|taken|rejected|denied)\b/i;
-const POSITIVE_RE = /\b(is available|are available|is free|is open|you can book|can be booked|go ahead and book)\b/i;
+const POSITIVE_RE =
+  /\b(is free|is open|is yours|you can (book|use|have)|can be booked|go ahead|meets every|passes every|all (the )?rules)\b/i;
+/** "available" that is not part of "unavailable" and not negated ("not available"). */
+const BARE_AVAILABLE_RE = /(?<!\bnot |\bun|\bnot\s)available\b/i;
+const UNAVAILABLE_STATUS_RE = /\b(unavailable|not available|cannot be booked|can't be booked)\b/i;
+/** Review fix F8: printable ASCII plus en dash and typographic apostrophe; no bidi, zero-width or look-alike letters. */
+const ALLOWED_CHARS_RE = /^[\x20-\x7E–’]*$/;
+/** Review fix F2: words that identify each reason. The explanation must use its own and no other reason's. */
+const REASON_KEYWORDS: Partial<Record<ReasonCode, RegExp>> = {
+  OVERLAP: /\b(overlap\w*|existing booking|already booked)\b/i,
+  ROOM_BLOCKED: /\b(blocked|closed)\b/i,
+  START_NOT_AFTER_NOW: /\b(current time|in the past|already (passed|started)|now)\b/i,
+  TOO_LONG: /\b(120-minute|120 minutes|two hours|too long|longer than)\b/i,
+  START_NOT_BEFORE_END: /\b(end time|before the end|after the end)\b/i,
+  INVALID_BOOKING_DATA: /\b(invalid|booking data)\b/i,
+};
+/** Mid-sentence capitalised words that are not part of the room label look like invented names (F2). */
+function inventedProperNoun(text: string, roomLabel: string): string | null {
+  const labelWords = new Set(roomLabel.split(/\s+/));
+  for (const sentence of text.split(/[.!?]+(?:\s+|$)/)) {
+    const words = sentence.trim().split(/\s+/).slice(1);
+    for (const w of words) {
+      const word = w.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
+      if (/^[A-Z]/.test(word) && !labelWords.has(word)) return word;
+    }
+  }
+  return null;
+}
 const ACTION_CLAIM_RE =
   /\b(i|i've|i have|we|we've|we have)\s+(booked|reserved|confirmed|cancel+ed|changed|moved)\b|\b(has|have) been (booked|reserved|confirmed|cancel+ed) for you\b|\breserved for you\b|\bbooking (is )?confirmed\b/i;
 const TIME_TOKEN_RE = /\b\d{1,2}:\d{2}\b/g;
@@ -156,6 +183,7 @@ export function validateExplanation(raw: unknown, req: ExplainRequest): Validate
   const text = raw.replace(/\s+/g, " ").trim();
   if (text === "") return { ok: false, error: "Explanation is empty." };
   if (text.length > LIMITS.explanationMax) return { ok: false, error: "Explanation is too long." };
+  if (!ALLOWED_CHARS_RE.test(text)) return { ok: false, error: "Explanation contains characters that are not allowed." };
   if (countSentences(text) > LIMITS.maxSentences) return { ok: false, error: "Explanation has more than two sentences." };
   if (FORBIDDEN_MARKUP_RE.test(text)) return { ok: false, error: "Explanation contains markup or links." };
   if (ACTION_CLAIM_RE.test(text)) return { ok: false, error: "Explanation claims a booking action." };
@@ -164,9 +192,23 @@ export function validateExplanation(raw: unknown, req: ExplainRequest): Validate
   if (req.isAvailable && NEGATIVE_RE.test(text)) {
     return { ok: false, error: "Explanation contradicts the decision (says unavailable)." };
   }
-  if (!req.isAvailable && POSITIVE_RE.test(text)) {
+  if (!req.isAvailable && (POSITIVE_RE.test(text) || BARE_AVAILABLE_RE.test(text))) {
     return { ok: false, error: "Explanation contradicts the decision (says available)." };
   }
+  // Review fix F1: the confirmed status must be stated explicitly, not just "not contradicted".
+  if (req.isAvailable ? !BARE_AVAILABLE_RE.test(text) : !UNAVAILABLE_STATUS_RE.test(text)) {
+    return { ok: false, error: "Explanation does not state the confirmed status." };
+  }
+  // Review fix F2: the stated reason must be the rule engine's reason, and no other.
+  const own = REASON_KEYWORDS[req.reasonCode];
+  if (own && !own.test(text)) return { ok: false, error: "Explanation does not give the confirmed reason." };
+  for (const [code, re] of Object.entries(REASON_KEYWORDS)) {
+    if (code !== req.reasonCode && re.test(text)) {
+      return { ok: false, error: "Explanation gives a reason that the booking rules did not report." };
+    }
+  }
+  const invented = inventedProperNoun(text, req.roomLabel);
+  if (invented) return { ok: false, error: `Explanation mentions a name that was not supplied (${invented}).` };
 
   // No invented times or numbers: only the requested times, the room label and the rule limits may appear.
   const allowedTimes = new Set([req.start, req.end, "00:00", "24:00"]);

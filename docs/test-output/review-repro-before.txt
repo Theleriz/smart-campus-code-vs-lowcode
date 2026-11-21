@@ -1,0 +1,11 @@
+   × F1 – an unavailable slot must not be described as usable > rejects: Good news, Lecture Hall A is now available from 13:00 to 14:00. 6ms
+   × F1 – an unavailable slot must not be described as usable > rejects: Lecture Hall A from 13:00 to 14:00 meets every booking rule, so you can use it. 1ms
+   × F1 – an unavailable slot must not be described as usable > rejects: Lecture Hall A is yours from 13:00 to 14:00. 0ms
+   × F1 – an unavailable slot must not be described as usable > an explanation must state the confirmed status 0ms
+   × F2 – invented details and a different reason are rejected > rejects: Lecture Hall A is unavailable from 13:00 to 14:00 because Professor Smith is teaching Quantum Physics there. 0ms
+   × F2 – invented details and a different reason are rejected > rejects: Lecture Hall A is unavailable from 13:00 to 14:00 because it is closed for maintenance. 0ms
+   × F8 – look-alike and bidi characters are rejected > rejects "Lecture Hall A is ‮elbaliava‬ from 13:00 to 14:00." 1ms
+   × F8 – look-alike and bidi characters are rejected > rejects "Lecture Hall A is аvailable from 13:00 to 14:00." 0ms
+   × F8 – look-alike and bidi characters are rejected > rejects "Lecture Hall A is un​available from 13:00 to 14:00 because it overlaps an existing booking." 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  9 failed | 2 passed (11)

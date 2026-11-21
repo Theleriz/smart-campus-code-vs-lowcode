@@ -58,7 +58,9 @@ describe("T1–T5 deterministic decision + mock explanation agree (AC1, AC2)", (
     expect(outcome.text).toMatch(/120-minute limit/);
   });
 
-  it("evaluateAvailability gives the same decision and reasons as checkAvailability (AC1 unchanged)", () => {
+  // Review F9: checkAvailability now wraps evaluateAvailability, so this only checks the wrapper and that
+  // codes line up with reasons. Rule equivalence with the baseline is proven by the 26 unchanged baseline tests.
+  it("checkAvailability is a faithful wrapper and every reason has exactly one code", () => {
     for (const r of [...ROOMS, null]) {
       for (let start = 480; start <= 1020; start += 30) {
         for (const len of [-30, 0, 30, 60, 120, 150]) {
