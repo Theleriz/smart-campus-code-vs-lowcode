@@ -13,7 +13,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Study Room 204 is available from 10:00 to 11:00 because this time meets every booking rule. This is only an explanation, so no booking has been made.",
-    "latencyMs": 362
+    "latencyMs": 388
   },
   {
     "id": "02-overlap",
@@ -29,7 +29,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room. Try a slot that starts after that booking ends or ends before it begins.",
-    "latencyMs": 384
+    "latencyMs": 390
   },
   {
     "id": "03-blocked-room",
@@ -45,7 +45,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Computer Lab 3 is unavailable from 10:00 to 11:00 because the room is currently closed for booking. Please choose a different room.",
-    "latencyMs": 387
+    "latencyMs": 400
   },
   {
     "id": "04-invalid-time",
@@ -61,7 +61,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Study Room 204 is unavailable from 12:00 to 11:00 because the start time is not before the end time. Choose an end time that is later than the start time.",
-    "latencyMs": 383
+    "latencyMs": 391
   },
   {
     "id": "05-past-time",
@@ -77,7 +77,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Study Room 204 is unavailable from 09:00 to 10:00 because the start time is not later than the current time. Pick a start time later than now.",
-    "latencyMs": 374
+    "latencyMs": 389
   },
   {
     "id": "06-too-long",
@@ -93,7 +93,7 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Seminar Room 7 is unavailable from 11:30 to 14:00 because the booking is longer than the 120-minute limit. Try a shorter slot of up to two hours.",
-    "latencyMs": 379
+    "latencyMs": 397
   },
   {
     "id": "07-timeout",
@@ -110,7 +110,7 @@
     "source": "fallback",
     "label": "Standard explanation · AI unavailable (timed out)",
     "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room.",
-    "latencyMs": 5500
+    "latencyMs": 5527
   },
   {
     "id": "08-api-error",
@@ -127,7 +127,7 @@
     "source": "fallback",
     "label": "Standard explanation · AI unavailable (service error)",
     "text": "Study Room 204 is available from 10:00 to 11:00 because this time meets every booking rule.",
-    "latencyMs": 379
+    "latencyMs": 374
   },
   {
     "id": "09-hallucination",
@@ -144,7 +144,7 @@
     "source": "fallback",
     "label": "Standard explanation · AI unavailable (answer failed the safety check)",
     "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room.",
-    "latencyMs": 368
+    "latencyMs": 398
   },
   {
     "id": "10-live-no-key",
@@ -161,7 +161,7 @@
     "source": "fallback",
     "label": "Standard explanation · AI unavailable (model not configured)",
     "text": "Auditorium B is available from 10:00 to 11:00 because this time meets every booking rule.",
-    "latencyMs": 82
+    "latencyMs": 86
   },
   {
     "id": "11-mobile-overlap",
@@ -181,6 +181,6 @@
     "source": "mock",
     "label": "AI-generated explanation\nMock AI",
     "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room. Try a slot that starts after that booking ends or ends before it begins.",
-    "latencyMs": 394
+    "latencyMs": 358
   }
 ]

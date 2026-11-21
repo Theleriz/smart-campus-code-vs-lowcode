@@ -9,7 +9,7 @@ The app (Vite + React + TypeScript) checks whether one fictional campus room is 
 ```bash
 npm ci
 npm run dev        # http://localhost:5173
-npm test           # 54 tests
+npm test           # 65 tests
 npm run typecheck && npm run lint && npm run build
 ```
 
