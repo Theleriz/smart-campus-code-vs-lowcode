@@ -1,0 +1,186 @@
+[
+  {
+    "id": "01-available",
+    "title": "Available slot, Mock AI",
+    "input": {
+      "room": "Study Room 204",
+      "start": "10:00",
+      "end": "11:00"
+    },
+    "decisionBefore": "Available",
+    "decisionAfter": "Available",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Study Room 204 is available from 10:00 to 11:00 because this time meets every booking rule. This is only an explanation, so no booking has been made.",
+    "latencyMs": 362
+  },
+  {
+    "id": "02-overlap",
+    "title": "Overlap with existing booking",
+    "input": {
+      "room": "Lecture Hall A",
+      "start": "13:00",
+      "end": "14:00"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room. Try a slot that starts after that booking ends or ends before it begins.",
+    "latencyMs": 384
+  },
+  {
+    "id": "03-blocked-room",
+    "title": "Blocked room",
+    "input": {
+      "room": "Computer Lab 3",
+      "start": "10:00",
+      "end": "11:00"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Computer Lab 3 is unavailable from 10:00 to 11:00 because the room is currently closed for booking. Please choose a different room.",
+    "latencyMs": 387
+  },
+  {
+    "id": "04-invalid-time",
+    "title": "Start after end",
+    "input": {
+      "room": "Study Room 204",
+      "start": "12:00",
+      "end": "11:00"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Study Room 204 is unavailable from 12:00 to 11:00 because the start time is not before the end time. Choose an end time that is later than the start time.",
+    "latencyMs": 383
+  },
+  {
+    "id": "05-past-time",
+    "title": "Start before current time",
+    "input": {
+      "room": "Study Room 204",
+      "start": "09:00",
+      "end": "10:00"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Study Room 204 is unavailable from 09:00 to 10:00 because the start time is not later than the current time. Pick a start time later than now.",
+    "latencyMs": 374
+  },
+  {
+    "id": "06-too-long",
+    "title": "Longer than 120 minutes",
+    "input": {
+      "room": "Seminar Room 7",
+      "start": "11:30",
+      "end": "14:00"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Seminar Room 7 is unavailable from 11:30 to 14:00 because the booking is longer than the 120-minute limit. Try a shorter slot of up to two hours.",
+    "latencyMs": 379
+  },
+  {
+    "id": "07-timeout",
+    "title": "Simulated timeout -> fallback",
+    "input": {
+      "room": "Lecture Hall A",
+      "start": "13:00",
+      "end": "14:00",
+      "simulate": "timeout"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "fallback",
+    "label": "Standard explanation · AI unavailable (timed out)",
+    "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room.",
+    "latencyMs": 5500
+  },
+  {
+    "id": "08-api-error",
+    "title": "Simulated API failure -> fallback",
+    "input": {
+      "room": "Study Room 204",
+      "start": "10:00",
+      "end": "11:00",
+      "simulate": "error"
+    },
+    "decisionBefore": "Available",
+    "decisionAfter": "Available",
+    "decisionUnchanged": true,
+    "source": "fallback",
+    "label": "Standard explanation · AI unavailable (service error)",
+    "text": "Study Room 204 is available from 10:00 to 11:00 because this time meets every booking rule.",
+    "latencyMs": 379
+  },
+  {
+    "id": "09-hallucination",
+    "title": "Hallucinated model answer -> blocked",
+    "input": {
+      "room": "Lecture Hall A",
+      "start": "13:00",
+      "end": "14:00",
+      "simulate": "invalid-output"
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "fallback",
+    "label": "Standard explanation · AI unavailable (answer failed the safety check)",
+    "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room.",
+    "latencyMs": 368
+  },
+  {
+    "id": "10-live-no-key",
+    "title": "Live LLM selected, no server key -> fallback",
+    "input": {
+      "room": "Auditorium B",
+      "start": "10:00",
+      "end": "11:00",
+      "engine": "llm"
+    },
+    "decisionBefore": "Available",
+    "decisionAfter": "Available",
+    "decisionUnchanged": true,
+    "source": "fallback",
+    "label": "Standard explanation · AI unavailable (model not configured)",
+    "text": "Auditorium B is available from 10:00 to 11:00 because this time meets every booking rule.",
+    "latencyMs": 82
+  },
+  {
+    "id": "11-mobile-overlap",
+    "title": "Mobile 375 px",
+    "input": {
+      "room": "Lecture Hall A",
+      "start": "13:00",
+      "end": "14:00",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      }
+    },
+    "decisionBefore": "Unavailable",
+    "decisionAfter": "Unavailable",
+    "decisionUnchanged": true,
+    "source": "mock",
+    "label": "AI-generated explanation\nMock AI",
+    "text": "Lecture Hall A is unavailable from 13:00 to 14:00 because that time overlaps an existing booking for this room. Try a slot that starts after that booking ends or ends before it begins.",
+    "latencyMs": 394
+  }
+]
