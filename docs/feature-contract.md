@@ -50,10 +50,14 @@ Extra fields, missing fields, wrong types, non-JSON bodies and bodies over 1 KB 
 Accepted only if, after whitespace cleanup, it:
 
 - is 1–300 characters and at most two sentences;
+- uses only printable ASCII (plus the en dash and the typographic apostrophe), so it contains no bidi, zero-width or look-alike characters;
 - has no markup, links, braces or code characters;
-- agrees with the decision (no "unavailable/blocked/overlap" words for an available slot; no "is available/you can book" for an unavailable one);
-- claims no booking action ("I booked/reserved/cancelled…");
+- **states** the confirmed status ("available" for an available slot; "unavailable", "not available" or "cannot be booked" otherwise) and does not contradict it (no "unavailable/blocked/overlap" words for an available slot; no "available", "is yours" or "you can use it" for an unavailable one);
+- gives the rule engine's reason (for example "overlap…" or "existing booking" for `OVERLAP`) and no other reason's keywords;
+- claims no booking action ("I booked/reserved/cancelled…") and names no person or event (capitalised words in mid-sentence must belong to the room label);
 - mentions no time other than the requested start/end (or the rule limits 00:00/24:00) and no number other than the room label's digits and the 120-minute limit.
+
+The status, reason, character and name rules were added after the agentic review (findings F1, F2, F8; see [agentic-review.md](agentic-review.md)).
 
 Otherwise the result is treated as a failure.
 
@@ -61,7 +65,7 @@ Otherwise the result is treated as a failure.
 
 | ID | Criterion | Where enforced | Tests |
 |---|---|---|---|
-| EX-AC1 | Existing availability and overlap rules remain unchanged | `checkAvailability` wraps `evaluateAvailability`; grid test compares both | 26 old tests + "same decision and reasons" grid test |
+| EX-AC1 | Existing availability and overlap rules remain unchanged | Rules and their order in `evaluateAvailability` are unchanged; `checkAvailability` is a thin wrapper | The 26 baseline tests pass unedited; the review agent compared the baseline and new function on 489,648 inputs with 0 differences |
 | EX-AC2 | Explanation agrees with the deterministic result; no invented booking details | `validateExplanation`, request has no booking details | T1–T5, T10, validator tests, S4 |
 | EX-AC3 | Empty, malformed or overly long input is rejected | `validateExplainRequest`, `handleExplain` size limit | T6, T7, T7b–d, S2 |
 | EX-AC4 | Timeout, error or missing key gives a safe fallback | `explainAvailability` timeout + catch, server 503/504/502 | T8, T9, T9b, T9c, S1, S5 |

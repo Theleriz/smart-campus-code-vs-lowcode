@@ -16,7 +16,7 @@ Fixture: fictional data from `src/data.ts`; "Now" = 09:30 (app default). UI runs
 | TC8 | Simulated API failure | TC1 + "API error (HTTP 500)" | Fallback "(service error)"; no error details shown | Fallback "(service error)"; status Available unchanged | ✅ | [08](screenshots/08-api-error.png) |
 | TC9 | Hallucinated model answer | TC2 + "Hallucinated answer" (says available, invents 07:15–09:45, claims to have booked) | Answer blocked by the output validator; fallback "(answer failed the safety check)" | Fallback shown; the invented text never reaches the screen; status Unavailable unchanged | ✅ | [09](screenshots/09-hallucination.png) |
 | TC10 | Unavailable key | Auditorium B 10:00–11:00, engine "Live LLM (server)", no `LLM_API_KEY` | Server answers 503; fallback "(model not configured)" | Fallback "(model not configured)"; status Available unchanged | ✅ | [10](screenshots/10-live-no-key.png) |
-| TC11 | Mobile layout (AC6) | TC2 at 375 px | Status and explanation cards readable, no horizontal scroll | Both cards stacked and readable | ✅ | [11](screenshots/11-mobile-overlap.png) |
+| TC11 | Mobile layout (AC6) | TC2 at 375 px | Status and explanation cards readable, no horizontal scroll | Both cards stacked and readable | ✅ | [11](screenshots/11-mobile-overlap.png), close-up [12](screenshots/12-mobile-check-section.png) |
 | TC12 | UI never changes the decision | All runs above | Status text before and after "Explain" is identical | 11/11 identical (`decisionUnchanged: true`) | ✅ | ui-check.json |
 
 ## Input validation test cases (unit / server)
