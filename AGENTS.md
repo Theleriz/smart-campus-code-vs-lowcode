@@ -7,6 +7,7 @@ Rules for any AI agent or maintainer working on this project. Read this file bef
 - Fictional sample data only (`src/data.ts`). Keep the existing fictional rooms and bookings unchanged; never add real names, people or schedules.
 - No login, auth, database or persistence. Do not use `@supabase/supabase-js` (it is an unused leftover).
 - Practice #11 adds one optional feature: **Explain availability** (`src/explain/`, `server/`). It is the only code allowed to make a network call, and only to the project's own `POST /api/explain` endpoint.
+- Lesson 12 adds a **one-room contract** (`src/contract/`, tab "One-room check (Lesson 12)") that reuses the same rules with start time + duration + blocked flag, and a **low-code copy** of it (`lowcode/appsmith/`). The two must stay identical: `lowcode/appsmith/parity.test.ts` must pass after any change to either. Contract and AC1–AC6 for this part: `docs/lesson-12/requirements.md`. Fixture: `src/contract/data.ts` (do not change).
 
 ## Acceptance criteria — booking rules (must be preserved)
 - AC1: reject start >= end, times outside 00:00–24:00, and start at or before the supplied current time.

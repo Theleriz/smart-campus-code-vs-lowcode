@@ -1,0 +1,110 @@
+{
+  "url": "https://app.appsmith.com/app/smart-campus-room-checker-lowcode/page1-6b0598525441f3e820a02932",
+  "ranAt": "2026-11-24T14:20:12.635Z",
+  "passed": 8,
+  "total": 8,
+  "results": [
+    {
+      "id": "T1",
+      "title": "Valid free interval",
+      "start": "12:00",
+      "duration": "60",
+      "blocked": false,
+      "expect": "AVAILABLE",
+      "observed": "✅ Available — The room is free from 12:00 to 13:00.  [available: true · reasonCode: AVAILABLE]",
+      "reasonCode": "AVAILABLE",
+      "pass": true,
+      "screenshot": "lowcode-T1-valid-free-interval.png"
+    },
+    {
+      "id": "T2",
+      "title": "Overlap with existing booking",
+      "start": "11:00",
+      "duration": "60",
+      "blocked": false,
+      "expect": "OVERLAP",
+      "observed": "❌ Unavailable — Overlaps with \"Thesis Defense\" (10:00–11:30).  [available: false · reasonCode: OVERLAP]",
+      "reasonCode": "OVERLAP",
+      "pass": true,
+      "screenshot": "lowcode-T2-overlap-with-existing-booking.png"
+    },
+    {
+      "id": "T3",
+      "title": "Blocked room",
+      "start": "12:00",
+      "duration": "60",
+      "blocked": true,
+      "expect": "ROOM_BLOCKED",
+      "observed": "❌ Unavailable — The room is blocked (for example maintenance), so it cannot be booked at any time.  [available: false · reasonCode: ROOM_BLOCKED]",
+      "reasonCode": "ROOM_BLOCKED",
+      "pass": true,
+      "screenshot": "lowcode-T3-blocked-room.png"
+    },
+    {
+      "id": "T4",
+      "title": "Duration = 0",
+      "start": "12:00",
+      "duration": "0",
+      "blocked": false,
+      "expect": "INVALID_DURATION",
+      "observed": "⚠️ Check your input — Duration must be a whole number of minutes from 1 to 120.  [available: false · reasonCode: INVALID_DURATION]",
+      "reasonCode": "INVALID_DURATION",
+      "pass": true,
+      "screenshot": "lowcode-T4-duration-0.png"
+    },
+    {
+      "id": "T5",
+      "title": "Duration = 121",
+      "start": "12:00",
+      "duration": "121",
+      "blocked": false,
+      "expect": "INVALID_DURATION",
+      "observed": "⚠️ Check your input — Duration must be a whole number of minutes from 1 to 120.  [available: false · reasonCode: INVALID_DURATION]",
+      "reasonCode": "INVALID_DURATION",
+      "pass": true,
+      "screenshot": "lowcode-T5-duration-121.png"
+    },
+    {
+      "id": "T6",
+      "title": "Start in the past",
+      "start": "09:00",
+      "duration": "30",
+      "blocked": false,
+      "expect": "START_IN_PAST",
+      "observed": "⚠️ Check your input — Start time must be in the future (after 09:30).  [available: false · reasonCode: START_IN_PAST]",
+      "reasonCode": "START_IN_PAST",
+      "pass": true,
+      "screenshot": "lowcode-T6-start-in-the-past.png"
+    },
+    {
+      "id": "T7",
+      "title": "Adjacent interval",
+      "start": "11:30",
+      "duration": "60",
+      "blocked": false,
+      "expect": "AVAILABLE",
+      "observed": "✅ Available — The room is free from 11:30 to 12:30.  [available: true · reasonCode: AVAILABLE]",
+      "reasonCode": "AVAILABLE",
+      "pass": true,
+      "screenshot": "lowcode-T7-adjacent-interval.png"
+    },
+    {
+      "id": "T8",
+      "title": "Bookings unchanged",
+      "expect": "Smart Campus · Seminar Room 7 (low-code, Appsmith) — fictional data · 3 bookings · #c36cc934",
+      "observed": "Smart Campus · Seminar Room 7 (low-code, Appsmith) — fictional data · 3 bookings · #c36cc934",
+      "bookingsTableUnchanged": true,
+      "pass": true
+    }
+  ],
+  "inAppRunnerPassCells": 5,
+  "xssProbe": {
+    "payload": "<img src=x onerror=alert(1)>",
+    "startValue": "<img src=x onerror=alert(1)>",
+    "result": "⚠️ Check your input — Please enter a start time as HH:MM (for example 12:00).  [available: false · reasonCode: INVALID_START]",
+    "injectedImg": 0,
+    "alertFired": false
+  },
+  "bindingProbe": "⚠️ Check your input — Please enter a start time as HH:MM (for example 12:00).  [available: false · reasonCode: INVALID_START]",
+  "mobileOverflow": false
+}

@@ -1,0 +1,15 @@
+Initial state: blocked switch off
+T1 PASS  expected AVAILABLE, observed AVAILABLE – ✅ Available — The room is free from 12:00 to 13:00.  [available: true · reasonCode: AVAILABLE]
+T2 PASS  expected OVERLAP, observed OVERLAP – ❌ Unavailable — Overlaps with "Thesis Defense" (10:00–11:30).  [available: false · reasonCode: OVERLAP]
+T3 PASS  expected ROOM_BLOCKED, observed ROOM_BLOCKED – ❌ Unavailable — The room is blocked (for example maintenance), so it cannot be booked at any time.  [available: false · reasonCode: ROOM_BLOCKED]
+T4 PASS  expected INVALID_DURATION, observed INVALID_DURATION – ⚠️ Check your input — Duration must be a whole number of minutes from 1 to 120.  [available: false · reasonCode: INVALID_DURATION]
+T5 PASS  expected INVALID_DURATION, observed INVALID_DURATION – ⚠️ Check your input — Duration must be a whole number of minutes from 1 to 120.  [available: false · reasonCode: INVALID_DURATION]
+T6 PASS  expected START_IN_PAST, observed START_IN_PAST – ⚠️ Check your input — Start time must be in the future (after 09:30).  [available: false · reasonCode: START_IN_PAST]
+T7 PASS  expected AVAILABLE, observed AVAILABLE – ✅ Available — The room is free from 11:30 to 12:30.  [available: true · reasonCode: AVAILABLE]
+T8 PASS  fingerprint before/after equal: true, table equal: true
+In-app runner: 5 PASS cells in the tests table
+XSS probe: field kept "<img src=x onerror=alert(1)>", result "⚠️ Check your input — Please enter a start time as HH:MM (for example 12:00).  [available: false · reasonCode: INVALID_START]", injected <img> 0, alert false
+Binding probe: result "⚠️ Check your input — Please enter a start time as HH:MM (for example 12:00).  [available: false · reasonCode: INVALID_START]"
+Mobile 375 px: horizontal overflow false
+
+8 / 8 passed

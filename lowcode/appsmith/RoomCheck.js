@@ -27,7 +27,7 @@ export default {
     return /^\d{1,4}$/.test(text) ? Number(text) : NaN;
   },
 
-  // Pure decision: returns { available, reasonCode, message, status }.
+  // Pure decision: returns { available, reasonCode, message, status }. Same rules and order as src/contract/roomContract.ts.
   check(startTime, duration, blocked, nowLabel) {
     const invalid = (reasonCode, message) => ({ available: false, reasonCode, message, status: "INVALID_INPUT" });
     const now = this.toMinutes(nowLabel);
@@ -74,6 +74,11 @@ export default {
 
   // "Run T1–T8" button -> onClick: {{RoomCheck.runTests()}}  (same inputs as src/contract/data.ts)
   runTests() {
+    return storeValue("tests", this.testRows(), false);
+  },
+
+  // Pure: runs the shared inputs and returns one row per test.
+  testRows() {
     const cases = [
       ["T1", "Valid free interval", "12:00", "60", false, "AVAILABLE", "AVAILABLE"],
       ["T2", "Overlap with an existing booking", "11:00", "60", false, "UNAVAILABLE", "OVERLAP"],
@@ -91,6 +96,6 @@ export default {
     });
     const after = this.fingerprint();
     rows.push({ test: "T8", case: "Bookings unchanged", expected: before, observed: after, result: before === after ? "PASS" : "FAIL" });
-    return storeValue("tests", rows, false);
+    return rows;
   },
 };

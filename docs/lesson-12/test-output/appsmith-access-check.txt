@@ -1,0 +1,4 @@
+Anonymous /edit -> /user/login | login form visible: true
+Viewer page: JS Object source in API responses: true
+Viewer page: e-mail-like string in API responses (besides anonymousUser and @appsmith.com): false
+Viewer page: e-mail-like string in visible text: false

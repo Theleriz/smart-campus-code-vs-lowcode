@@ -1,0 +1,21 @@
+Final checks 2026-11-24 19:22
+$ npm test
+ ✓ src/regression.test.ts (2 tests) 9ms
+ ✓ src/risk.test.ts (6 tests) 10ms
+ ✓ src/utils.test.ts (18 tests) 20ms
+ ✓ src/explain/review.test.ts (11 tests) 15ms
+ ✓ src/contract/roomContract.test.ts (34 tests) 30ms
+ ✓ server/explainHandler.test.ts (5 tests) 50ms
+ ✓ lowcode/appsmith/parity.test.ts (10 tests) 302ms
+ ✓ src/explain/explain.test.ts (23 tests) 323ms
+ Test Files  8 passed (8)
+      Tests  109 passed (109)
+$ npm run typecheck
+typecheck: OK (0 errors)
+$ npm run lint
+lint: OK (0 problems)
+$ npm run build
+dist/index.html                   0.73 kB │ gzip:  0.40 kB
+dist/assets/index-DmLV-tgi.css   17.61 kB │ gzip:  4.21 kB
+dist/assets/index-5_hXG42M.js   188.27 kB │ gzip: 58.87 kB
+✓ built in 13.14s
