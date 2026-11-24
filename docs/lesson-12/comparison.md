@@ -9,7 +9,7 @@ Important context: the assistant typed the code and drove the Appsmith editor. A
 | Phase | Code-based (React + TypeScript) | Low-code (Appsmith Cloud, free plan) |
 |---|---|---|
 | Setup | 1 min (copy repo, `npm ci`, baseline checks) | ≈3 min (account sign-in by the student, not timed exactly; new app) |
-| Implementation | ≈3 min (contract module, UI component, tabs) | ≈12 min (JS Object, 11 widgets, labels, bindings, events, deploy, make public) |
+| Implementation | ≈3 min (contract module, UI component, tabs) | ≈12 min (JS Object, 10 widgets, labels, bindings, events, deploy, make public) |
 | Debugging / repair | ≈2 min (XSS probe could not type into a number field; mobile text wrap) | ≈8 min (see defects below) |
 | Testing | ≈1 min to run (unit + UI script, 8 / 8) | ≈2 min to run (UI script on the public app, 8 / 8) |
 | **Total** | **≈7 min** (18:45 → 18:52) | **≈25 min** (≈18:56 → 19:21) |
