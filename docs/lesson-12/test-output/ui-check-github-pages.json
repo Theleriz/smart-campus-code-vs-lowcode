@@ -1,0 +1,115 @@
+{
+  "url": "https://theleriz.github.io/smart-campus-code-vs-lowcode/",
+  "ranAt": "2026-11-24T14:34:12.736Z",
+  "passed": 8,
+  "total": 8,
+  "results": [
+    {
+      "id": "T1",
+      "title": "Valid free interval",
+      "start": "12:00",
+      "duration": "60",
+      "blocked": false,
+      "expect": "AVAILABLE",
+      "observedStatus": "AVAILABLE",
+      "reasonCode": "AVAILABLE",
+      "message": "The room is free from 12:00 to 13:00.",
+      "pass": true,
+      "screenshot": "code-T1-valid-free-interval.png"
+    },
+    {
+      "id": "T2",
+      "title": "Overlap with existing booking",
+      "start": "11:00",
+      "duration": "60",
+      "blocked": false,
+      "expect": "UNAVAILABLE",
+      "observedStatus": "UNAVAILABLE",
+      "reasonCode": "OVERLAP",
+      "message": "Overlaps with \"Thesis Defense\" (10:00–11:30).",
+      "pass": true,
+      "screenshot": "code-T2-overlap-with-existing-booking.png"
+    },
+    {
+      "id": "T3",
+      "title": "Blocked room",
+      "start": "12:00",
+      "duration": "60",
+      "blocked": true,
+      "expect": "UNAVAILABLE",
+      "observedStatus": "UNAVAILABLE",
+      "reasonCode": "ROOM_BLOCKED",
+      "message": "The room is blocked (for example maintenance), so it cannot be booked at any time.",
+      "pass": true,
+      "screenshot": "code-T3-blocked-room.png"
+    },
+    {
+      "id": "T4",
+      "title": "Duration = 0",
+      "start": "12:00",
+      "duration": "0",
+      "blocked": false,
+      "expect": "INVALID_INPUT",
+      "observedStatus": "INVALID_INPUT",
+      "reasonCode": "INVALID_DURATION",
+      "message": "Duration must be a whole number of minutes from 1 to 120.",
+      "pass": true,
+      "screenshot": "code-T4-duration-0.png"
+    },
+    {
+      "id": "T5",
+      "title": "Duration = 121",
+      "start": "12:00",
+      "duration": "121",
+      "blocked": false,
+      "expect": "INVALID_INPUT",
+      "observedStatus": "INVALID_INPUT",
+      "reasonCode": "INVALID_DURATION",
+      "message": "Duration must be a whole number of minutes from 1 to 120.",
+      "pass": true,
+      "screenshot": "code-T5-duration-121.png"
+    },
+    {
+      "id": "T6",
+      "title": "Start in the past",
+      "start": "09:00",
+      "duration": "30",
+      "blocked": false,
+      "expect": "INVALID_INPUT",
+      "observedStatus": "INVALID_INPUT",
+      "reasonCode": "START_IN_PAST",
+      "message": "Start time must be in the future (after 09:30).",
+      "pass": true,
+      "screenshot": "code-T6-start-in-the-past.png"
+    },
+    {
+      "id": "T7",
+      "title": "Adjacent interval",
+      "start": "11:30",
+      "duration": "60",
+      "blocked": false,
+      "expect": "AVAILABLE",
+      "observedStatus": "AVAILABLE",
+      "reasonCode": "AVAILABLE",
+      "message": "The room is free from 11:30 to 12:30.",
+      "pass": true,
+      "screenshot": "code-T7-adjacent-interval.png"
+    },
+    {
+      "id": "T8",
+      "title": "Bookings unchanged",
+      "expect": "3 bookings · #c36cc934",
+      "observedStatus": "3 bookings · #c36cc934",
+      "pass": true
+    }
+  ],
+  "inAppRunner": "8 / 8 passed",
+  "xssProbe": {
+    "payload": "<img src=x onerror=alert(1)>",
+    "storedValue": "",
+    "reasonCode": "INVALID_DURATION",
+    "injectedImg": 0,
+    "alertFired": false
+  },
+  "mobileOverflow": false
+}

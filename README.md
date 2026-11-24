@@ -9,7 +9,8 @@ The same small feature — *is one fictional seminar room free for a chosen star
 | Stack | Vite + React + TypeScript (this repo) | Appsmith Cloud, free plan |
 | Where the rules live | [`src/contract/roomContract.ts`](src/contract/roomContract.ts) (pure, no UI) | JS Object `RoomCheck` ([copy in repo](lowcode/appsmith/RoomCheck.js)) |
 | UI | [`src/components/RoomContractChecker.tsx`](src/components/RoomContractChecker.tsx) | 10 widgets, see [lowcode/appsmith/README.md](lowcode/appsmith/README.md) |
-| Run it | `npm ci` → `npm run dev` → tab **One-room check (Lesson 12)** | **Live:** [Appsmith app (public)](https://app.appsmith.com/app/smart-campus-room-checker-lowcode/page1-6b0598525441f3e820a02932) |
+| Live demo | [GitHub Pages](https://theleriz.github.io/smart-campus-code-vs-lowcode/) (tab **One-room check (Lesson 12)**) | [Appsmith app (public)](https://app.appsmith.com/app/smart-campus-room-checker-lowcode/page1-6b0598525441f3e820a02932) |
+| Run locally | `npm ci` → `npm run dev` | – |
 | T1–T8 | **8 / 8** | **8 / 8** |
 
 ## Report

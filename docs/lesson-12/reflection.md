@@ -15,7 +15,7 @@
 - Nothing in the 8-test table is simulated: both columns were run through the real UIs.
 - The "current time" is **simulated** in both apps (an input with default 09:30) so the tests are repeatable. A real system would use the server clock.
 - The Appsmith app is not connected to Appsmith Git sync, and the JSON export is not in the repository yet. The logic itself is in the repo (`lowcode/appsmith/RoomCheck.js`), and the widget set-up is described in `lowcode/appsmith/README.md`.
-- The code-based app has no public live demo yet (deploying needs approval in `AGENTS.md`); the Appsmith app has one.
+- Both apps have a public live demo: code-based on GitHub Pages (https://theleriz.github.io/smart-campus-code-vs-lowcode/, published after my approval), low-code on Appsmith.
 - `npm audit` dev-dependency advisories are documented, not fixed (major upgrades, separate task).
 
 **What I would do differently next time.** Connect Appsmith to Git from the start, so the low-code side also gets reviewable history. Read back every property after editing it, not only at the end.

@@ -1,0 +1,14 @@
+T1 PASS  expected AVAILABLE, observed AVAILABLE (AVAILABLE) – The room is free from 12:00 to 13:00.
+T2 PASS  expected UNAVAILABLE, observed UNAVAILABLE (OVERLAP) – Overlaps with "Thesis Defense" (10:00–11:30).
+T3 PASS  expected UNAVAILABLE, observed UNAVAILABLE (ROOM_BLOCKED) – The room is blocked (for example maintenance), so it cannot be booked at any time.
+T4 PASS  expected INVALID_INPUT, observed INVALID_INPUT (INVALID_DURATION) – Duration must be a whole number of minutes from 1 to 120.
+T5 PASS  expected INVALID_INPUT, observed INVALID_INPUT (INVALID_DURATION) – Duration must be a whole number of minutes from 1 to 120.
+T6 PASS  expected INVALID_INPUT, observed INVALID_INPUT (START_IN_PAST) – Start time must be in the future (after 09:30).
+T7 PASS  expected AVAILABLE, observed AVAILABLE (AVAILABLE) – The room is free from 11:30 to 12:30.
+T8 PASS  before "3 bookings · #c36cc934", after "3 bookings · #c36cc934"
+In-app runner: 8 / 8 passed
+XSS probe: number field kept "" after setting the payload
+XSS probe: reasonCode INVALID_DURATION, injected <img> count 0, alert fired false
+Mobile 375 px: horizontal overflow false
+
+8 / 8 passed

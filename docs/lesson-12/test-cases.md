@@ -18,7 +18,7 @@ Inputs are in [requirements.md](requirements.md#common-test-inputs-prepared-befo
 
 Both columns were observed **through the user interface**, not only in unit tests:
 
-- Code-based: Chrome via Playwright on the local dev server, 1280 px – [ui-check.txt](test-output/ui-check.txt), [ui-check.json](test-output/ui-check.json).
+- Code-based: Chrome via Playwright on the local dev server, 1280 px – [ui-check.txt](test-output/ui-check.txt), [ui-check.json](test-output/ui-check.json); repeated on the **published GitHub Pages site** with the same result, 8 / 8 – [ui-check-github-pages.txt](test-output/ui-check-github-pages.txt) (the code-based screenshots are from this live run).
 - Low-code: Chrome via Playwright on the **published public Appsmith URL**, anonymous browser – [appsmith-ui-check.txt](test-output/appsmith-ui-check.txt), [appsmith-ui-check.json](test-output/appsmith-ui-check.json).
 
 Nothing in the low-code column is simulated: every row was clicked in the running Appsmith app.
@@ -63,6 +63,8 @@ UI check with screenshots (needs Playwright Core and Chrome; the dev server must
 npx vite --port 5179
 $env:PW_MODULE = "<path>\node_modules\playwright-core\index.mjs"; node docs/lesson-12/ui-check/ui-check.mjs
 ```
+
+**Code-based (live site):** open https://theleriz.github.io/smart-campus-code-vs-lowcode/, press **Run T1–T8**, or run the UI script against it: `node docs/lesson-12/ui-check/ui-check.mjs https://theleriz.github.io/smart-campus-code-vs-lowcode/`.
 
 **Low-code (Appsmith, public link):** open the app, press **Run T1–T8**, or type the inputs from the table above and press **Check availability**. Automated:
 
