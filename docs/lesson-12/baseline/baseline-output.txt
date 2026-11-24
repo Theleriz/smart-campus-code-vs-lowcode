@@ -1,0 +1,25 @@
+Baseline frozen 2026-11-24 18:46 — commit ff67c37 (Practice #11 final, branch main)
+
+$ npm test
+ ✓ src/risk.test.ts (6 tests) 19ms
+ ✓ src/regression.test.ts (2 tests) 15ms
+ ✓ src/utils.test.ts (18 tests) 39ms
+ ✓ src/explain/review.test.ts (11 tests) 31ms
+ ✓ server/explainHandler.test.ts (5 tests) 56ms
+ ✓ src/explain/explain.test.ts (23 tests) 293ms
+
+ Test Files  6 passed (6)
+      Tests  65 passed (65)
+   Start at  18:46:28
+   Duration  3.17s (transform 890ms, setup 0ms, collect 1.49s, tests 452ms, environment 3ms, prepare 1.83s)
+
+$ npm run typecheck
+typecheck: OK
+$ npm run lint
+lint: OK
+$ npm run build
+computing gzip size...
+dist/index.html                   0.73 kB │ gzip:  0.40 kB
+dist/assets/index-0GQkUMor.css   16.35 kB │ gzip:  3.97 kB
+dist/assets/index-DiIJYvA0.js   175.14 kB │ gzip: 55.82 kB
+✓ built in 13.60s

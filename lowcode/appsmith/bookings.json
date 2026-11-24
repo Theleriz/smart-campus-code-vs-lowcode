@@ -1,0 +1,5 @@
+[
+  { "id": "B1", "title": "Morning Lecture", "start": "08:00", "end": "09:00" },
+  { "id": "B2", "title": "Thesis Defense", "start": "10:00", "end": "11:30" },
+  { "id": "B3", "title": "Workshop", "start": "15:00", "end": "16:00" }
+]

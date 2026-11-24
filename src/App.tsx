@@ -13,12 +13,15 @@ import { TimeSlider } from "./components/TimeSlider";
 import { DecisionPanel } from "./components/DecisionPanel";
 import { Timeline } from "./components/Timeline";
 import { ExplanationPanel } from "./components/ExplanationPanel";
+import { RoomContractChecker } from "./components/RoomContractChecker";
 import { buildExplainRequest } from "./explain/contract";
 import { createHttpAdapter, createMockAdapter, type SimulatedFailure } from "./explain/adapters";
 
 type Engine = "mock" | "llm";
+type View = "lesson12" | "full";
 
 function App() {
+  const [view, setView] = useState<View>(() => (window.location.hash === "#full" ? "full" : "lesson12"));
   const [bookings] = useState<Booking[]>(INITIAL_BOOKINGS);
   const [currentTime, setCurrentTime] = useState(570); // 09:30
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
@@ -65,6 +68,7 @@ function App() {
               <p className="text-xs sm:text-sm text-slate-500">Room Availability Checker</p>
             </div>
           </div>
+          {view === "full" && (
           <div className="flex items-center gap-2 text-sm text-slate-600 bg-slate-100 rounded-lg px-3 py-1.5">
             <Clock className="w-4 h-4 text-sky-600" />
             <label htmlFor="current-time" className="text-xs text-slate-500 font-medium">
@@ -82,10 +86,37 @@ function App() {
               className="tabular-nums font-medium bg-transparent border-none outline-none cursor-pointer text-slate-700"
             />
           </div>
+          )}
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+        <nav className="mb-5 flex gap-1 rounded-xl bg-slate-200/70 p-1 w-full sm:w-fit" aria-label="Views">
+          {([
+            ["lesson12", "One-room check (Lesson 12)"],
+            ["full", "Full checker (Practices 6–11)"],
+          ] as const).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={view === id}
+              onClick={() => {
+                setView(id);
+                window.location.hash = id === "full" ? "full" : "";
+              }}
+              className={`flex-1 sm:flex-none rounded-lg px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors ${
+                view === id ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+
+        {view === "lesson12" ? (
+          <RoomContractChecker />
+        ) : (
+          <>
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
           {/* Left column: room selection + time */}
           <div className="lg:col-span-3 space-y-5">
@@ -293,6 +324,8 @@ function App() {
             currentTime={currentTime}
           />
         </div>
+          </>
+        )}
       </main>
 
       <footer className="max-w-5xl mx-auto px-4 pb-8">
