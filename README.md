@@ -2,6 +2,13 @@
 
 AI-Driven Software Engineering (KBTU), **Practice work #12 (Lesson 12): compare code-based and low-code solutions.**
 
+## 🔗 Live demo
+
+- **Code-based (React + TypeScript, GitHub Pages):** https://theleriz.github.io/smart-campus-code-vs-lowcode/
+- **Low-code (Appsmith, published):** https://app.appsmith.com/app/smart-campus-room-checker-lowcode/page1-6b0598525441f3e820a02932
+
+Both open without login. In each app press **Run T1–T8** to run the eight acceptance tests, or enter a start time and duration and press **Check availability**.
+
 The same small feature — *is one fictional seminar room free for a chosen start time and duration?* — is built twice against one shared contract (AC1–AC6) and checked with the same eight tests:
 
 | | Code-based | Low-code |
